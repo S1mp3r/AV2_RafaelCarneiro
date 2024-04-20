@@ -10,20 +10,20 @@ iv = get_random_bytes(16)
 
 def encrypt_password(password, key, iv):
     cipher = AES.new(key, AES.MODE_CBC, iv)
-    # Converter a senha em bytes e preencher para um múltiplo de 16 bytes
+
     password_bytes = password.encode()
     padded_password = pad(password_bytes, 16)
-    # Criptografar a senha
+
     encrypted_password = cipher.encrypt(padded_password)
     return encrypted_password
 
 def decrypt_password(encrypted_password, key, iv):
     decipher = AES.new(key, AES.MODE_CBC, iv)
-    # Descriptografar a senha
+
     decrypted_password = decipher.decrypt(encrypted_password)
-    # Remover o preenchimento
+
     unpadded_password = unpad(decrypted_password, 16)
-    # Decodificar de volta para uma string
+
     return unpadded_password.decode()
 
 def cash_Transaction(user_Fund):
@@ -89,5 +89,5 @@ print(result)
 
 runIt_ = lambda result: create_transaction(transaction_type()) if result == "Login successful!" else "Login failed. \n Try Again..."
 
-result2(runIt_(result))
+result2 = runIt_(result)
 print(result2)
