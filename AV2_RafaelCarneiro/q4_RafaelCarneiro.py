@@ -1,6 +1,5 @@
 import mysql.connector
 
-# Função lambda para criar uma conexão com o banco de dados
 db_connect = lambda host, user, password: mysql.connector.connect(
     host=host,
     user=user,
