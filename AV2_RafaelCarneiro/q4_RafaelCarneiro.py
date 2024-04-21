@@ -4,13 +4,14 @@ db_connect = lambda host, user, password, database: mysql.connector.connect(
     host=host,
     user=user,
     password=password,
-    database='sys'
+    database=database
 )
 
 #Add Host, User e Senha do banco de dados de teste utilizado.
 host = ""
 user = ""
 password = ""
+database = "
 
 mydb = db_connect(host, user, password, database)
 
