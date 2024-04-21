@@ -4,13 +4,14 @@ db_connect = lambda host, user, password: mysql.connector.connect(
     host=host,
     user=user,
     password=password
+    database='sys'
 )
 
 host = ""
 user = ""
 password = ""
 
-mydb = db_connect(host, user, password)
+mydb = db_connect(host, user, password, database)
 
 #=================================================================================================================================================
 
