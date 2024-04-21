@@ -92,7 +92,7 @@ user_pssw_Logado = "123456"
 
 user_Fund = round(random.uniform(1, 5000), 2)
 
-result = authenticate_user(user_name, user_pssw, key, iv, encrypted_passwords[0][1])
+result = authenticate_user(user_pssw, key, iv, encrypted_passwords[0][1])
 print(result)
 
 runIt_ = lambda result: create_transaction(transaction_type()) if result == True else "Login failed. \n Try Again..."
