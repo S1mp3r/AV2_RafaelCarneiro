@@ -28,15 +28,18 @@ def decrypt_password(encrypted_password, key, iv):
     return unpadded_password.decode()
 
 def authenticate_user(password, key, iv, stored_encrypted_password):
-    decipher = AES.new(key, AES.MODE_CBC, iv)
+    create_cipher = lambda: AES.new(key, AES.MODE_CBC, iv)
+    decrypt = lambda cipher, data: cipher.decrypt(data)
+    encode_and_pad = lambda pwd: pad(pwd.encode(), 16)
+    unpad_and_decode = lambda data: unpad(data, 16).decode()
 
-    decrypted_stored_password = decipher.decrypt(stored_encrypted_password)
-    unpadded_stored_password = unpad(decrypted_stored_password, 16)
+    cipher = create_cipher()
+    decrypted_stored_password = decrypt(cipher, stored_encrypted_password)
+    
+    input_password_padded = encode_and_pad(password)
+    stored_password_unpadded = unpad_and_decode(decrypted_stored_password)
 
-    input_password_bytes = password.encode()
-    padded_input_password = pad(input_password_bytes, 16)
-
-    return padded_input_password == unpadded_stored_password
+    return input_password_padded == decrypted_stored_password
 
 def store_encrypted_password(username, encrypted_password):
     encrypted_passwords.append((username, encrypted_password))
