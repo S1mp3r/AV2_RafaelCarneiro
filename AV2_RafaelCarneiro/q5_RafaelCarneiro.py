@@ -27,14 +27,16 @@ def decrypt_password(encrypted_password, key, iv):
 
     return unpadded_password.decode()
 
-def authenticate_user(password, key, iv, stored_password):
+def authenticate_user(password, key, iv, stored_encrypted_password):
     decipher = AES.new(key, AES.MODE_CBC, iv)
-    encrypted_input_password = encrypt_password(password, key, iv)
 
-    decrypted_stored_password = decipher.decrypt(stored_password)
+    decrypted_stored_password = decipher.decrypt(stored_encrypted_password)
     unpadded_stored_password = unpad(decrypted_stored_password, 16)
 
-    return encrypted_input_password == unpadded_stored_password
+    input_password_bytes = password.encode()
+    padded_input_password = pad(input_password_bytes, 16)
+
+    return padded_input_password == unpadded_stored_password
 
 def store_encrypted_password(username, encrypted_password):
     encrypted_passwords.append((username, encrypted_password))
@@ -92,7 +94,7 @@ user_pssw_Logado = "123456"
 
 user_Fund = round(random.uniform(1, 5000), 2)
 
-result = authenticate_user(user_pssw, key, iv, encrypted_passwords[0][1])
+result = authenticate_user(user_pssw_Logado, key, iv, encrypted_passwords[0][1])
 print(result)
 
 runIt_ = lambda result: create_transaction(transaction_type()) if result == True else "Login failed. \n Try Again..."
