@@ -99,7 +99,7 @@ try:
             "title": "VARCHAR(255)",
             "genre": "VARCHAR(255)",
             "release_date": "DATE",
-            "id_console": "VARCHAR(255)",
+            "id_console": "INT",
             "FOREIGN KEY (id_console)": "REFERENCES VIDEOGAMES(id_console)"
         },
         "COMPANY": {
