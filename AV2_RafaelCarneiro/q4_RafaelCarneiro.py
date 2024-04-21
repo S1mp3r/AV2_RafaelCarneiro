@@ -3,7 +3,7 @@ import mysql.connector
 db_connect = lambda host, user, password: mysql.connector.connect(
     host=host,
     user=user,
-    password=password
+    password=password,
     database='sys'
 )
 
