@@ -101,7 +101,7 @@ try:
 #=================================================================================================================================================
 
     # Consulta SELECT para obter todos os dados da tabela USERS
-    select_all_users_query = gen_select_query("USERS", "u", ["id", "name", "country", "id_console"])
+    select_all_users_query = lambda: gen_select_query("USERS", "u", ["id", "name", "country", "id_console"])
     print("Consulta SELECT para todos os dados da tabela USERS:")
     print(select_all_users_query())
 
