@@ -7,13 +7,12 @@ db_connect = lambda host, user, password, database: mysql.connector.connect(
     database=database
 )
 
-#Add Host, User e Senha do banco de dados de teste utilizado.
-host = ""
-user = ""
-password = ""
-database = "
+host = lambda: ""
+user = lambda: ""
+password = lambda: ""
+database = lambda: ""
 
-mydb = db_connect(host, user, password, database)
+mydb = db_connect(host(), user(), password(), database())
 
 #=================================================================================================================================================
 
@@ -67,7 +66,7 @@ gen_select_query = lambda table_name, table_alias, attributes: (
 mycursor = mydb.cursor()
 
 try:
-    tables = {
+    tables = lambda: {
         "USERS": {
             "id": "INT AUTO_INCREMENT PRIMARY KEY",
             "name": "VARCHAR(255)",
@@ -95,35 +94,36 @@ try:
         }
     }
 
-    for table_name, columns in tables.items():
-        create_table(mycursor, table_name, columns)
+    create_tables_lambda = lambda cursor, tables: [create_table(cursor, table_name, columns) for table_name, columns in tables.items()]
+
+    create_tables_lambda(mycursor, tables())
 
 #=================================================================================================================================================
 
     # Consulta SELECT para obter todos os dados da tabela USERS
     select_all_users_query = gen_select_query("USERS", "u", ["id", "name", "country", "id_console"])
     print("Consulta SELECT para todos os dados da tabela USERS:")
-    print(select_all_users_query)
+    print(select_all_users_query())
 
 #=================================================================================================================================================
 
     # Dados para inserir na tabela USERS
-    new_user_data = {"name": "Alice", "country": "Canada", "id_console": "2"}
+    new_user_data = lambda: {"name": "Alice", "country": "Canada", "id_console": "2"}
 
     # Consulta INSERT para inserir novos dados na tabela USERS
-    insert_user_query = gen_insert_query("USERS", list(new_user_data.keys()), list(new_user_data.values()))
+    insert_user_query = lambda: gen_insert_query("USERS", list(new_user_data().keys()), list(new_user_data().values()))
     print("Consulta INSERT para inserir dados na tabela USERS:")
-    print(insert_user_query)
+    print(insert_user_query())
 
 #=================================================================================================================================================
 
     # Condição para deletar um registro da tabela USERS
-    delete_user_condition = "id = '2'"  # Supondo que queremos deletar o usuário com id = 2
+    delete_user_condition = lambda: "id = '2'"  # Supondo que queremos deletar o usuário com id = 2
 
     # Consulta DELETE para deletar dados da tabela USERS com a condição especificada
-    delete_user_query = gen_delete_query("USERS", delete_user_condition)
+    delete_user_query = lambda: gen_delete_query("USERS", delete_user_condition())
     print("Consulta DELETE para deletar dados da tabela USERS:")
-    print(delete_user_query)
+    print(delete_user_query())
 
 #=================================================================================================================================================
 
