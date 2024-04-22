@@ -58,9 +58,9 @@ def fund_Transfer(user_Fund, user_name):
     print("Provide Bank Deposit Details: " + "\nUsername: " + user_name + " // Credits:%.2f" % user_Fund)
     print("----------------------------------------------")
 
-    str_Choice = input("Confirm or Cancel the Transaction type ('Confirm' or 'Cancel'): ")
+    str_Choice = lambda: input("Confirm or Cancel the Transaction type ('Confirm' or 'Cancel'): ")
 
-    return choices_from_user(str_Choice)
+    return choices_from_user(str_Choice())
 
 def credit(user_Fund, user_name):
     choices_from_user = lambda x : "Transaction Completed" if x == "Confirm" else "Close Transaction"
