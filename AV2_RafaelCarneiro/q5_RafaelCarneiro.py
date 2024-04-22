@@ -8,6 +8,8 @@ iv = get_random_bytes(16)
 
 encrypted_passwords = []
 usernames = []
+store_data = []
+results = []
 
 def encrypt_password(password, key, iv):
     cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -28,18 +30,15 @@ def decrypt_password(encrypted_password, key, iv):
     return unpadded_password.decode()
 
 def authenticate_user(password, key, iv, stored_encrypted_password):
-    create_cipher = lambda: AES.new(key, AES.MODE_CBC, iv)
-    decrypt = lambda cipher, data: cipher.decrypt(data)
-    encode_and_pad = lambda pwd: pad(pwd.encode(), 16)
-    unpad_and_decode = lambda data: unpad(data, 16).decode()
+    decipher = AES.new(key, AES.MODE_CBC, iv)
 
-    cipher = create_cipher()
-    decrypted_stored_password = decrypt(cipher, stored_encrypted_password)
-    
-    input_password_padded = encode_and_pad(password)
-    stored_password_unpadded = unpad_and_decode(decrypted_stored_password)
+    decrypted_stored_password = decipher.decrypt(stored_encrypted_password)
+    unpadded_stored_password = unpad(decrypted_stored_password, 16)
 
-    return input_password_padded == decrypted_stored_password
+    input_password_bytes = password.encode()
+    padded_input_password = pad(input_password_bytes, 16)
+
+    return padded_input_password == unpadded_stored_password
 
 def store_encrypted_password(username, encrypted_password):
     encrypted_passwords.append((username, encrypted_password))
@@ -71,13 +70,13 @@ def credit(user_Fund, user_name):
     print("Provide Credit Account Details: " + "\nUsername: " + user_name + " // Credits: %.2f" % user_Fund)
     print("----------------------------------------------")
 
-    str_Choice = input("Confirm or Cancel the Transaction type ('Confirm' or 'Cancel'): ")
+    str_Choice = lambda : input("Confirm or Cancel the Transaction type ('Confirm' or 'Cancel'): ")
 
-    return choices_from_user(str_Choice)
+    return choices_from_user(str_Choice())
 
 create_transaction = lambda x : cash_Transaction(user_Fund) if x == "Cash" else (
-    fund_Transfer(user_Fund, user_name) if x == "Fund Transfer" else (
-    credit(user_Fund, user_name) if x == "Credit" else "Incorrect Value"))
+    fund_Transfer(user_Fund, store_data[0]) if x == "Fund Transfer" else (
+    credit(user_Fund, store_data[0]) if x == "Credit" else "Incorrect Value"))
 
 def transaction_type():
     t_t = input("Enter transaction type (Cash, Fund Transfer, Credit): ")
@@ -86,21 +85,28 @@ def transaction_type():
 
 print("Creating Transaction...!\n")
 
-user_name = input("Please write down below your Username: ")
-user_pssw = input("Please write down below your Password: ")
+user_name = lambda : input("Please write down below your Username: ")
+user_pssw = lambda : input("Please write down below your Password: ")
 
-encrypted_password = encrypt_password(user_pssw, key, iv)
-store_encrypted_password(user_name, encrypted_password)
+store_data[0] = user_name()
+store_data[1] = user_pssw()
 
-user_name_Logado = "UserLog"
-user_pssw_Logado = "123456"
+encrypted_password = encrypt_password(store_data[1], key, iv)
+store_encrypted_password(store_data[0], encrypted_password)
+
+user_name_Logado = lambda : "UserLog"
+user_pssw_Logado = lambda : "123456"
 
 user_Fund = round(random.uniform(1, 5000), 2)
 
-result = authenticate_user(user_pssw_Logado, key, iv, encrypted_passwords[0][1])
-print(result)
+result = lambda: authenticate_user(user_pssw_Logado(), key, iv, encrypted_passwords[0][1])
+
+results[0] = result()
+
+print(results[0])
+
 
 runIt_ = lambda result: create_transaction(transaction_type()) if result == True else "Login failed. \n Try Again..."
 
-result2= runIt_(result)
-print(result2)
+result2 = lambda : runIt_(results[0])
+print(result2())
