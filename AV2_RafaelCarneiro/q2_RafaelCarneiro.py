@@ -14,50 +14,61 @@ class TestTransactionFunctions(unittest.TestCase):
     def test_cash_Transaction(self):
         with patch('builtins.input', side_effect=['100']):
             with patch('sys.stdout', new_callable=StringIO) as fake_out:
-                result = cash_Transaction(self.user_Fund)
+                result = lambda: cash_Transaction(self.user_Fund)
+                result()
                 self.assertEqual(result, "Transaction Completed")
                 self.assertIn("Printing Payment Receipt", fake_out.getvalue())
 
     def test_fund_Transfer(self):
         with patch('builtins.input', side_effect=['Confirm']):
-            result = fund_Transfer(self.user_Fund, self.user_name)
+            result = lambda: fund_Transfer(self.user_Fund, self.user_name)
+            result()
             self.assertEqual(result, "Transaction Completed")
 
         with patch('builtins.input', side_effect=['Cancel']):
-            result = fund_Transfer(self.user_Fund, self.user_name)
+            result = lambda: fund_Transfer(self.user_Fund, self.user_name)
+            result()
             self.assertEqual(result, "Close Transaction")
 
     def test_credit(self):
         with patch('builtins.input', side_effect=['Confirm']):
-            result = credit(self.user_Fund, self.user_name)
+            result = lambda: credit(self.user_Fund, self.user_name)
+            result()
             self.assertEqual(result, "Transaction Completed")
 
         with patch('builtins.input', side_effect=['Cancel']):
-            result = credit(self.user_Fund, self.user_name)
+            result = lambda: credit(self.user_Fund, self.user_name)
+            result()
             self.assertEqual(result, "Close Transaction")
 
     def test_create_transaction(self):
         with patch('builtins.input', side_effect=['100']):
-            result = create_transaction("Cash")
+            result = lambda: create_transaction("Cash")
+            result()
             self.assertEqual(result, "Transaction Completed")
 
         with patch('builtins.input', side_effect=['Confirm']):
-            result = create_transaction("Fund Transfer")
+            result = lambda: create_transaction("Fund Transfer")
+            result()
             self.assertEqual(result, "Transaction Completed")
 
         with patch('builtins.input', side_effect=['Cancel']):
-            result = create_transaction("Fund Transfer")
+            result = lambda:  create_transaction("Fund Transfer")
+            result()
             self.assertEqual(result, "Close Transaction")
 
         with patch('builtins.input', side_effect=['Confirm']):
-            result = create_transaction("Credit")
+            result = lambda: create_transaction("Credit")
+            result()
             self.assertEqual(result, "Transaction Completed")
 
         with patch('builtins.input', side_effect=['Cancel']):
-            result = create_transaction("Credit")
+            result = lambda: create_transaction("Credit")
+            result()
             self.assertEqual(result, "Close Transaction")
 
-        result = create_transaction("Invalid")
+        result = lambda: create_transaction("Invalid")
+        result()
         self.assertEqual(result, "Incorrect Value")
 
 if __name__ == '__main__':
